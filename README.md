@@ -114,3 +114,7 @@ Developed by **NetIRC**
 
 > _Enterprise-grade password security analysis and cryptographic hashing.  
 > Modern, fast, secure, and installable as a PWA._
+
+## Tags
+
+password, hash, hashing, security, cryptography, password-generator, password-analysis, password-strength, entropy, pwa, progressive-web-app, offline, client-side, webapp, javascript, crypto, service-worker, md5, sha1, sha256, sha384, sha512
