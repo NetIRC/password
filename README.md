@@ -106,6 +106,10 @@ Works fully client-side and offline once installed as a PWA.**
 - No data is sent to any server.
 - For best security and full cryptographic support, use over HTTPS.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
+
 ## Author
 
 Developed by **NetIRC**
