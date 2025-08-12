@@ -1,4 +1,4 @@
-# Password Hash Generator
+# Password Hash Generator: Enterprise-Grade Password Analysis & Cryptographic Hashing
 
 **Password Hash Generator** is an enterprise-grade web application for analyzing password security and generating cryptographic hashes. Designed for professional and personal use, it combines password strength analysis, secure password generation, and multi-algorithm hash calculation in a modern, responsive, and installable (PWA) interface.
 
@@ -60,6 +60,45 @@
 4. **Install as App:**  
    - Click "Install App" if prompted, or use your browser’s install option.
    - Works fully offline once installed.
+
+## Installation
+
+### 1. Run Locally
+
+You can use the Password Hash Generator by simply opening the `index.html` file in your browser.  
+No build or dependencies required.
+
+1. **Clone or download** this repository.
+2. **Open** `index.html` directly in any modern browser.
+
+> For full cryptographic support (Web Crypto API), use **HTTPS** or open the file on `localhost`.
+
+### 2. Install as a Progressive Web App (PWA)
+
+This app supports installation and offline usage on desktop and mobile devices.
+
+**On Chrome, Edge, or supported browsers:**
+- Open the app in your browser (either from your web server or the local file).
+- If prompted, click the **Install App** button or use the browser’s install menu:
+  - On desktop: Click the "Install App" icon in the address bar.
+  - On mobile: Use the "Add to Home Screen" option from the browser menu.
+- The app will be available like a native application and work offline.
+
+**Service Worker and Caching:**
+- The app automatically registers a Service Worker for caching and offline functionality.
+- All password and hash operations remain client-side for privacy.
+
+### 3. Self-hosting (optional)
+
+You can host the app on any static web server (GitHub Pages, Netlify, Vercel, etc):
+
+1. Upload all repository files to your server.
+2. Access the app via HTTPS for optimal security.
+
+---
+
+**No installation steps or dependencies required.  
+Works fully client-side and offline once installed as a PWA.**
 
 ## Security Notes
 
