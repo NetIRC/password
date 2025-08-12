@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Hash Generator</title>
     
-    <!-- PWA Meta Tags -->
     <meta name="description" content="Enterprise-grade password security analysis and cryptographic hashing tool">
     <meta name="theme-color" content="#1e293b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,10 +12,8 @@
     <meta name="apple-mobile-web-app-title" content="Password Hash Generator">
     <meta name="msapplication-TileColor" content="#1e293b">
     
-    <!-- PWA Manifest -->
     <link rel="manifest" id="manifest-placeholder">
     
-    <!-- Favicon and Icons -->
     <link rel="icon" type="image/svg+xml" id="favicon-placeholder">
     <style>
         * {
@@ -494,7 +491,6 @@
             display: inline-block;
         }
 
-        /* Install button styles */
         #install-button {
             animation: pulse 2s infinite;
         }
@@ -600,7 +596,6 @@
                     Password Configuration
                 </h2>
                 
-                <!-- Input Mode -->
                 <div id="inputSection">
                     <div class="input-section">
                         <label for="passwordInput" class="input-label">Enter password for analysis:</label>
@@ -618,7 +613,6 @@
                     </div>
                 </div>
 
-                <!-- Generate Mode -->
                 <div id="generateSection" class="hidden">
                     <div class="controls">
                         <div class="control-group">
@@ -695,7 +689,6 @@
                 </h2>
                 
                 <div class="hash-results" id="hashResults">
-                    <!-- Hash results will be populated here -->
                 </div>
             </div>
         </div>
@@ -714,7 +707,6 @@
         let currentMode = 'input';
         let currentPassword = '';
 
-        // Update length display
         document.getElementById('length').addEventListener('input', function() {
             document.getElementById('lengthDisplay').textContent = this.value;
         });
@@ -722,15 +714,12 @@
         function switchMode(mode) {
             currentMode = mode;
             
-            // Update button states
             document.getElementById('inputMode').classList.toggle('active', mode === 'input');
             document.getElementById('generateMode').classList.toggle('active', mode === 'generate');
             
-            // Show/hide sections
             document.getElementById('inputSection').classList.toggle('hidden', mode !== 'input');
             document.getElementById('generateSection').classList.toggle('hidden', mode !== 'generate');
             
-            // Clear results when switching modes
             document.getElementById('passwordDisplay').style.display = 'none';
             document.getElementById('hashSection').style.display = 'none';
         }
@@ -763,7 +752,6 @@
         function makePasswordSecure(password) {
             let improved = password;
             
-            // Ensure minimum length of 16 for professional standards
             if (improved.length < 16) {
                 const needed = 16 - improved.length;
                 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
@@ -772,7 +760,6 @@
                 }
             }
             
-            // Add missing character types
             if (!/[a-z]/.test(improved)) {
                 improved += String.fromCharCode(97 + Math.floor(Math.random() * 26));
             }
@@ -787,7 +774,6 @@
                 improved += symbols.charAt(Math.floor(Math.random() * symbols.length));
             }
             
-            // Shuffle to avoid predictable patterns
             return improved.split('').sort(() => Math.random() - 0.5).join('');
         }
 
@@ -830,7 +816,6 @@
             const indicator = document.getElementById('strengthIndicator');
             const tips = generateSecurityTips(password, analysis);
             
-            // Update strength indicator
             indicator.className = 'strength-indicator';
             
             if (analysis.score < 3) {
@@ -844,12 +829,10 @@
                 indicator.textContent = 'Strong Password - Meets security standards';
             }
             
-            // Update statistics
             document.getElementById('lengthStat').textContent = password.length;
             document.getElementById('charsetStat').textContent = analysis.charTypes;
             document.getElementById('entropyStat').textContent = Math.round(analysis.entropy);
             
-            // Show tips if needed
             const tipsSection = document.getElementById('securityTips');
             const tipsList = document.getElementById('tipsList');
             
@@ -866,13 +849,11 @@
             let feedback = [];
             let charTypes = 0;
             
-            // Length scoring
             if (password.length >= 8) score++;
             if (password.length >= 12) score++;
             if (password.length >= 16) score++;
             else if (password.length < 12) feedback.push('Use at least 12 characters for better security');
             
-            // Character variety
             if (/[a-z]/.test(password)) { score++; charTypes++; }
             else feedback.push('Include lowercase letters');
             
@@ -885,7 +866,6 @@
             if (/[^A-Za-z0-9]/.test(password)) { score++; charTypes++; }
             else feedback.push('Include special characters');
             
-            // Pattern detection
             if (/(.)\1{2,}/.test(password)) {
                 score--;
                 feedback.push('Avoid repeating characters');
@@ -896,7 +876,6 @@
                 feedback.push('Avoid common patterns and dictionary words');
             }
             
-            // Calculate entropy
             const charsetSize = 
                 (/[a-z]/.test(password) ? 26 : 0) +
                 (/[A-Z]/.test(password) ? 26 : 0) +
@@ -942,9 +921,7 @@
             document.getElementById('hashSection').style.display = 'block';
         }
 
-        // ✅ FIXED: Universal hash computation function (HTTP + HTTPS compatible)
         async function computeHash(text, algorithm) {
-            // ✅ Check if Web Crypto API is actually available (blocked on HTTP)
             const isCryptoAvailable = window.crypto && window.crypto.subtle && 
                 (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1');
             
@@ -953,12 +930,10 @@
                     const encoder = new TextEncoder();
                     const data = encoder.encode(text);
                     
-                    // Only use fallback for MD5 (not supported by Web Crypto API)
                     if (algorithm === 'MD5') {
                         return md5(text);
                     }
                     
-                    // Use Web Crypto API for all other algorithms
                     const hashBuffer = await crypto.subtle.digest(algorithm, data);
                     const hashArray = Array.from(new Uint8Array(hashBuffer));
                     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -968,12 +943,10 @@
                     return getFallbackHash(text, algorithm);
                 }
             } else {
-                // ✅ FIXED: Fallback for HTTP sites (crypto.subtle blocked)
                 return getFallbackHash(text, algorithm);
             }
         }
 
-        // ✅ FIXED: Corrected fallback implementations for HTTP
         function getFallbackHash(text, algorithm) {
             switch (algorithm) {
                 case 'MD5':
@@ -981,35 +954,28 @@
                 case 'SHA-1':
                     return sha1(text);
                 case 'SHA-256':
-                    return sha256(text); // ✅ Pure SHA-256, no contamination
+                    return sha256(text);
                 case 'SHA-384':
-                    // ✅ FIXED: Don't use SHA-256 fallback that can be contaminated
                     return sha384Fallback(text);
                 case 'SHA-512':
-                    // ✅ FIXED: Don't use SHA-256 fallback that can be contaminated  
                     return sha512Fallback(text);
                 default:
                     return sha256(text);
             }
         }
 
-        // ✅ NEW: Proper SHA-384 fallback (simplified but correct)
         function sha384Fallback(text) {
-            // Simple but valid approximation for fallback only
             const base = sha256(text);
             const extended = sha256(text + 'SHA384');
-            return (base + extended).substring(0, 96); // 384 bits = 96 hex chars
+            return (base + extended).substring(0, 96);
         }
 
-        // ✅ NEW: Proper SHA-512 fallback (simplified but correct)
         function sha512Fallback(text) {
-            // Simple but valid approximation for fallback only
             const part1 = sha256(text + 'SHA512_P1');
             const part2 = sha256(text + 'SHA512_P2'); 
-            return part1 + part2; // 512 bits = 128 hex chars
+            return part1 + part2; 
         }
 
-        // Standard MD5 Implementation
         function md5(text) {
             function rotateLeft(value, shift) {
                 return (value << shift) | (value >>> (32 - shift));
@@ -1089,7 +1055,6 @@
             ).join('');
         }
 
-        // Standard SHA-1 Implementation
         function sha1(text) {
             function rotateLeft(n, s) {
                 return (n << s) | (n >>> (32 - s));
@@ -1151,7 +1116,6 @@
             return [h0, h1, h2, h3, h4].map(h => h.toString(16).padStart(8, '0')).join('');
         }
 
-        // Standard SHA-256 Implementation
         function sha256(text) {
             function rightRotate(n, x) {
                 return (n >>> x) | (n << (32 - x));
@@ -1235,7 +1199,6 @@
             return div;
         }
 
-        // Standard copy function
         function copyTextToClipboard(elementId, btn) {
             const textToCopy = document.getElementById(elementId).textContent;
             
@@ -1288,14 +1251,12 @@
             }, 2000);
         }
 
-        // Initialize on load
         window.addEventListener('load', () => {
             switchMode('input');
             initializePWA();
             setupOfflineDetection();
         });
 
-        // Offline Detection
         function setupOfflineDetection() {
             const offlineIndicator = document.getElementById('offlineIndicator');
             
@@ -1307,13 +1268,11 @@
                 offlineIndicator.style.display = 'block';
             });
             
-            // Check initial state
             if (!navigator.onLine) {
                 offlineIndicator.style.display = 'block';
             }
         }
 
-        // Universal PWA Functionality
         function initializePWA() {
             const manifest = {
                 name: "Password Hash Generator",
@@ -1369,7 +1328,6 @@
             const faviconURL = "data:image/svg+xml;base64," + btoa(faviconSVG);
             document.getElementById('favicon-placeholder').href = faviconURL;
 
-            // Service Worker registration
             if ('serviceWorker' in navigator) {
                 registerServiceWorker();
             }
